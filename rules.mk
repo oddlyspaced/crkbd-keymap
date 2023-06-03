@@ -2,4 +2,4 @@
 #   change yes to no to disable
 #
 
-DEFAULT_FOLDER = milim/rev1
+DEFAULT_FOLDER = milim/nava
