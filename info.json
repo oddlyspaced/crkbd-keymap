@@ -2,7 +2,7 @@
     "keyboard_name": "Milim",
     "manufacturer": "oddlyspaced",
     "url": "",
-    "maintainer": "qmk",
+    "maintainer": "oddlyspaced",
     "usb": {
         "vid": "0x4653",
         "pid": "0x0001",
