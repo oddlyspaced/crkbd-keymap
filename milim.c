@@ -67,6 +67,12 @@ static void oled_render_layer_state(void) {
     oled_write_ln_P(PSTR(""), false);
 }
 
+static void oled_render_keyboard_status(void) {
+    led_t led_state = host_keyboard_led_state();
+    oled_write_P(PSTR("CAPS:"), false);
+    oled_write_P(led_state.caps_lock ? PSTR("ON") : PSTR("OFF"), false);
+}
+
 __attribute__((weak)) void oled_render_logo(void) {
     // clang-format off
     static const char PROGMEM crkbd_logo[] = {
@@ -84,6 +90,7 @@ bool oled_task_kb(void) {
     }
     if (is_keyboard_master()) {
         oled_render_layer_state();
+        oled_render_keyboard_status();
     } else {
         oled_render_logo();
     }
