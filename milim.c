@@ -36,12 +36,7 @@ __attribute__((weak)) const keypos_t PROGMEM hand_swap_config[MATRIX_ROWS][MATRI
 #ifdef OLED_ENABLE
 
 oled_rotation_t oled_init_kb(oled_rotation_t rotation) {
-    if (is_keyboard_master()) {
-        return OLED_ROTATION_270;
-    }
-    else {
-        return OLED_ROTATION_180;
-    }
+    return OLED_ROTATION_270;
 }
 
 static void oled_render_layer_state(void) {
