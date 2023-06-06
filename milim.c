@@ -48,13 +48,13 @@ static void oled_render_layer_state(void) {
     oled_write_P(PSTR("LYR: "), false);
     switch (get_highest_layer(layer_state)) {
         case 0:
-            oled_write_ln_P(PSTR("Def"), false);
+            oled_write_ln_P(PSTR("DEF"), false);
             break;
         case 1:
-            oled_write_ln_P(PSTR("Lwr"), false);
+            oled_write_ln_P(PSTR("LWR"), false);
             break;
         case 2:
-            oled_write_ln_P(PSTR("Ris"), false);
+            oled_write_ln_P(PSTR("UPR"), false);
             break;
         case 3:
             oled_write_ln_P(PSTR("Adjust"), false);
