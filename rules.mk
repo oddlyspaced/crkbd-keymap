@@ -2,7 +2,7 @@
 #   change yes to no to disable
 #
 
-DEFAULT_FOLDER = milim/nava
+DEFAULT_FOLDER = milim
 
 WPM_ENABLE = yes	# Enable word per minute counter
 LTO_ENABLE = yes	# Makes hex file smaller
