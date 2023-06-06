@@ -45,16 +45,16 @@ oled_rotation_t oled_init_kb(oled_rotation_t rotation) {
 }
 
 static void oled_render_layer_state(void) {
-    oled_write_P(PSTR("Layer: "), false);
+    oled_write_P(PSTR("LYR: "), false);
     switch (get_highest_layer(layer_state)) {
         case 0:
-            oled_write_ln_P(PSTR("Default"), false);
+            oled_write_ln_P(PSTR("Def"), false);
             break;
         case 1:
-            oled_write_ln_P(PSTR("Lower"), false);
+            oled_write_ln_P(PSTR("Lwr"), false);
             break;
         case 2:
-            oled_write_ln_P(PSTR("Raise"), false);
+            oled_write_ln_P(PSTR("Ris"), false);
             break;
         case 3:
             oled_write_ln_P(PSTR("Adjust"), false);
@@ -63,74 +63,9 @@ static void oled_render_layer_state(void) {
             oled_write_ln_P(PSTR("Undef"), false);
             break;
     }
+    // put a new new line after layer info
+    oled_write_ln_P(PSTR(""), false);
 }
-
-char     key_name = ' ';
-uint16_t last_keycode;
-uint8_t  last_row;
-uint8_t  last_col;
-
-static const char PROGMEM code_to_name[60] = {' ', ' ', ' ', ' ', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'R', 'E', 'B', 'T', '_', '-', '=', '[', ']', '\\', '#', ';', '\'', '`', ',', '.', '/', ' ', ' ', ' '};
-
-static void set_keylog(uint16_t keycode, keyrecord_t *record) {
-    key_name     = ' ';
-    last_keycode = keycode;
-    if (IS_QK_MOD_TAP(keycode)) {
-        if (record->tap.count) {
-            keycode = QK_MOD_TAP_GET_TAP_KEYCODE(keycode);
-        } else {
-            keycode = 0xE0 + biton(QK_MOD_TAP_GET_MODS(keycode) & 0xF) + biton(QK_MOD_TAP_GET_MODS(keycode) & 0x10);
-        }
-    } else if (IS_QK_LAYER_TAP(keycode) && record->tap.count) {
-        keycode = QK_LAYER_TAP_GET_TAP_KEYCODE(keycode);
-    } else if (IS_QK_MODS(keycode)) {
-        keycode = QK_MODS_GET_BASIC_KEYCODE(keycode);
-    } else if (IS_QK_ONE_SHOT_MOD(keycode)) {
-        keycode = 0xE0 + biton(QK_ONE_SHOT_MOD_GET_MODS(keycode) & 0xF) + biton(QK_ONE_SHOT_MOD_GET_MODS(keycode) & 0x10);
-    }
-    if (keycode > ARRAY_SIZE(code_to_name)) {
-        return;
-    }
-
-    // update keylog
-    key_name = pgm_read_byte(&code_to_name[keycode]);
-    last_row = record->event.key.row;
-    last_col = record->event.key.col;
-}
-
-static const char *depad_str(const char *depad_str, char depad_char) {
-    while (*depad_str == depad_char)
-        ++depad_str;
-    return depad_str;
-}
-
-static void oled_render_keylog(void) {
-    const char *last_row_str = get_u8_str(last_row, ' ');
-    oled_write(depad_str(last_row_str, ' '), false);
-    oled_write_P(PSTR("x"), false);
-    const char *last_col_str = get_u8_str(last_col, ' ');
-    oled_write(depad_str(last_col_str, ' '), false);
-    oled_write_P(PSTR(", k"), false);
-    const char *last_keycode_str = get_u16_str(last_keycode, ' ');
-    oled_write(depad_str(last_keycode_str, ' '), false);
-    oled_write_P(PSTR(":"), false);
-    oled_write_char(key_name, false);
-}
-
-// static void render_bootmagic_status(bool status) {
-//     /* Show Ctrl-Gui Swap options */
-//     static const char PROGMEM logo[][2][3] = {
-//         {{0x97, 0x98, 0}, {0xb7, 0xb8, 0}},
-//         {{0x95, 0x96, 0}, {0xb5, 0xb6, 0}},
-//     };
-//     if (status) {
-//         oled_write_ln_P(logo[0][0], false);
-//         oled_write_ln_P(logo[0][1], false);
-//     } else {
-//         oled_write_ln_P(logo[1][0], false);
-//         oled_write_ln_P(logo[1][1], false);
-//     }
-// }
 
 __attribute__((weak)) void oled_render_logo(void) {
     // clang-format off
@@ -149,7 +84,6 @@ bool oled_task_kb(void) {
     }
     if (is_keyboard_master()) {
         oled_render_layer_state();
-        oled_render_keylog();
     } else {
         oled_render_logo();
     }
@@ -158,7 +92,7 @@ bool oled_task_kb(void) {
 
 bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
     if (record->event.pressed) {
-        set_keylog(keycode, record);
+        // todo
     }
     return process_record_user(keycode, record);
 }
